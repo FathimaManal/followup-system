@@ -4,7 +4,7 @@ A full-stack app where a business user logs in, adds customers, sets a
 follow-up cadence per customer, and the system automatically sends
 AI-generated WhatsApp follow-ups on schedule - stopping the moment the
 customer replies.
-A note on WhatsApp integration: this runs against a mock WhatsApp provider by default, not the live Cloud API. Real WhatsApp Business API access requires Meta business verification, which realistically takes days rather than hours — not something achievable inside this timeline. Rather than lose build time chasing that approval, I built the mock as a genuine drop-in module (services/whatsappService.js) with the same function signature the real integration uses, including a working real-mode implementation already written and ready to enable (WHATSAPP_MODE=real) — swapping providers is a one-line env change, not a rewrite.
+A note on WhatsApp integration: this runs against a mock WhatsApp provider by default, not the live Cloud API. Real WhatsApp Business API access requires Meta business verification, which realistically takes days rather than hours  not something achievable inside this timeline. Rather than lose build time chasing that approval, I built the mock as a genuine drop-in module (services/whatsappService.js) with the same function signature the real integration uses, including a working real-mode implementation already written and ready to enable (WHATSAPP_MODE=real), swapping providers is a one-line env change, not a rewrite.
 
 ## Stack & why
 

@@ -1,7 +1,4 @@
-// db/db.js
-// Single SQLite connection + schema bootstrap. SQLite is used so the whole
-// system runs with zero external setup (no Postgres/Mongo to provision
-// under a 1-day deadline) while still keeping a proper relational schema.
+
 
 const path = require("path");
 const Database = require("better-sqlite3");

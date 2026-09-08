@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>WhatsApp Follow-up System</title>
+<link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+<div id="app">
+
+  <!-- LOGIN -->
+  <div id="loginScreen" class="login-wrap">
+    <div class="login-card">
+      <h1>WhatsApp Follow-up System</h1>
+      <p class="sub">Sign in to manage customers &amp; automations</p>
+      <form id="loginForm">
+        <label>Username</label>
+        <input id="loginUsername" type="text" autocomplete="username" required />
+        <label>Password</label>
+        <input id="loginPassword" type="password" autocomplete="current-password" required />
+        <div class="error-text" id="loginError"></div>
+        <button type="submit" class="btn-primary" style="width:100%; margin-top:14px;">Log in</button>
+      </form>
+      <p class="hint">Default: admin / admin123 (set via .env)</p>
+    </div>
+  </div>
+
+  <!-- APP -->
+  <div id="appScreen" class="hidden">
+    <div class="topbar">
+      <h1>WhatsApp <span class="badge">Follow-up System</span></h1>
+      <div>
+        <span class="hint" id="whoami" style="margin-right:14px;"></span>
+        <button class="btn-secondary btn-sm" id="logoutBtn">Log out</button>
+      </div>
+    </div>
+
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="dashboard">Dashboard</button>
+      <button class="tab-btn" data-tab="customers">Customers</button>
+    </div>
+
+    <main>
+      <!-- DASHBOARD TAB -->
+      <section id="tab-dashboard">
+        <div class="metrics" id="metrics"></div>
+        <div class="panel">
+          <h2>Recent Message Activity</h2>
+          <div id="recentMessages"></div>
+        </div>
+      </section>
+
+      <!-- CUSTOMERS TAB -->
+      <section id="tab-customers" class="hidden">
+        <div class="section-actions">
+          <h2 style="margin:0;">Customers</h2>
+          <button class="btn-primary" id="addCustomerBtn">+ Add Customer</button>
+        </div>
+        <div class="panel" style="padding:0;">
+          <table>
+            <thead>
+              <tr>
+                <th>Name</th><th>Phone</th><th>Company</th><th>Status</th><th>Automation</th><th></th>
+              </tr>
+            </thead>
+            <tbody id="customerTableBody"></tbody>
+          </table>
+          <div id="customerEmpty" class="empty hidden">No customers yet — add your first one above.</div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Add/Edit Customer Modal -->
+  <div id="customerModal" class="modal-backdrop hidden">
+    <div class="modal">
+      <h2 id="customerModalTitle">Add Customer</h2>
+      <form id="customerForm">
+        <input type="hidden" id="custId" />
+        <div class="row">
+          <div><label>Name *</label><input id="custName" required /></div>
+          <div><label>Phone (with country code) *</label><input id="custPhone" placeholder="+15551234567" required /></div>
+        </div>
+        <div class="row">
+          <div><label>Email</label><input id="custEmail" type="email" /></div>
+          <div><label>Company</label><input id="custCompany" /></div>
+        </div>
+        <label>Notes (used as AI context)</label>
+        <textarea id="custNotes" placeholder="e.g. Interested in the Pro plan, asked about pricing on a call"></textarea>
+
+        <h2 style="margin-top:20px; font-size:14px;">Follow-up Cadence</h2>
+        <div class="row">
+          <div><label>First message delay (minutes)</label><input id="ruleDelay" type="number" min="0" value="0" /></div>
+          <div><label>Interval between follow-ups (minutes)</label><input id="ruleInterval" type="number" min="1" value="2880" /></div>
+          <div><label>Max follow-ups</label><input id="ruleMax" type="number" min="1" max="20" value="3" /></div>
+        </div>
+        <p class="hint">Default interval 2880 min = 2 days. Use small numbers (e.g. 1–2 min) to demo quickly.</p>
+
+        <div class="error-text" id="customerFormError"></div>
+        <div class="modal-actions">
+          <button type="button" class="btn-secondary" id="customerCancelBtn">Cancel</button>
+          <button type="submit" class="btn-primary" id="customerSaveBtn">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Customer Detail Modal -->
+  <div id="detailModal" class="modal-backdrop hidden">
+    <div class="modal" style="width:640px;">
+      <div class="section-actions">
+        <h2 id="detailName" style="margin:0;"></h2>
+        <button class="btn-secondary btn-sm" id="detailCloseBtn">Close</button>
+      </div>
+      <div id="detailStatusRow" class="hint"></div>
+
+      <div style="display:flex; gap:10px; margin:14px 0;">
+        <button class="btn-secondary btn-sm" id="editCustomerBtn">Edit</button>
+        <button class="btn-warn btn-sm" id="pauseBtn">Pause automation</button>
+        <button class="btn-secondary btn-sm" id="resumeBtn">Resume automation</button>
+        <button class="btn-danger btn-sm" id="deleteCustomerBtn">Delete customer</button>
+      </div>
+
+      <div class="panel">
+        <h2>Simulate customer reply</h2>
+        <div class="row">
+          <input id="simulateReplyText" placeholder="Type a reply as the customer..." />
+          <button class="btn-primary" id="simulateReplyBtn" style="flex:0 0 auto;">Send reply</button>
+        </div>
+        <p class="hint">This mimics an inbound WhatsApp webhook — it will stop all pending follow-ups for this customer.</p>
+      </div>
+
+      <div class="panel">
+        <h2>Follow-up schedule</h2>
+        <table id="scheduleTable">
+          <thead><tr><th>#</th><th>Scheduled for</th><th>Status</th><th>Detail</th></tr></thead>
+          <tbody id="scheduleTableBody"></tbody>
+        </table>
+      </div>
+
+      <div class="panel">
+        <h2>Message history</h2>
+        <div class="msg-list" id="messageHistory"></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+<script src="/app.js"></script>
+</body>
+</html>

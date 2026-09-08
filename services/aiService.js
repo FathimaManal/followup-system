@@ -1,16 +1,4 @@
 // services/aiService.js
-// Generates a context-aware WhatsApp follow-up message using an LLM.
-// Wrapped so that an LLM outage/timeout/bad-key NEVER crashes the server
-// or blocks a scheduled send — it just falls back to a safe template
-// (this satisfies the "fault tolerance" requirement in the brief).
-//
-// Default provider is Groq: it has a genuinely free API tier (no card
-// required, generous rate limits), unlike Anthropic/OpenAI which are
-// pay-per-token. Get a free key at https://console.groq.com/keys
-// Groq's API is OpenAI-compatible, so it's the same request shape.
-//
-// Google Gemini also has a free tier if you'd rather use that —
-// see callGemini() below, just set AI_PROVIDER=gemini.
 
 const fetch = require("node-fetch");
 

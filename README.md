@@ -147,14 +147,7 @@ file — no other file needs to change.
 
 ## Deployment
 
-Works on Render/Railway/Fly.io as a standard Node web service:
-- Build command: `npm install`
-- Start command: `npm start`
-- Set the environment variables from `.env.example` in the platform's
-  dashboard (don't commit `.env`).
-- SQLite's file needs a persistent disk/volume on most platforms (Render's
-  free tier disk is ephemeral on redeploy — fine for a demo, mention this
-  caveat if asked).
+Deployed Link : https://followup-system.onrender.com
 
 ## What I'd add with more time
 

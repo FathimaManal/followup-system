@@ -1,9 +1,9 @@
-// scheduler/scheduleHelper.js
-// Pre-generates the follow-up "slots" for a customer as soon as a rule is
-// created/updated. The cron worker never invents send times on the fly —
-// it only ever looks at rows that already exist here — which is what
-// makes idempotency/dedup straightforward (see followup_schedule.dedupe_key).
-
+/* scheduler/scheduleHelper.js
+ Pre-generates the follow-up "slots" for a customer as soon as a rule is
+ created/updated. The cron worker never invents send times on the fly —
+ it only ever looks at rows that already exist here — which is what
+ makes idempotency/dedup straightforward (see followup_schedule.dedupe_key).
+*/
 const db = require("../db/db");
 
 function toIsoFromMinutesFromNow(minutes) {

@@ -1,15 +1,4 @@
 // services/whatsappService.js
-//
-// This module is the ONLY place that talks to WhatsApp. Swap the body of
-// `sendMessage` for a real WhatsApp Cloud API call (see the commented block
-// below) and nothing else in the app needs to change — routes/scheduler
-// only depend on this function's { success, providerId, error } contract.
-//
-// MOCK MODE (default): simulates network latency and an occasional
-// delivery failure so the "failure logging" and "fault tolerance"
-// requirements are actually exercised end-to-end without needing real
-// WhatsApp Business API access (which requires Meta business verification
-// that isn't realistic to get within a 1-day task).
 
 const USE_MOCK = (process.env.WHATSAPP_MODE || "mock") === "mock";
 

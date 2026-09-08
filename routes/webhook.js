@@ -1,9 +1,5 @@
 // routes/webhook.js
-//
-// In mock mode this endpoint is called from the UI's "Simulate customer
-// reply" button. In real mode, WhatsApp Cloud API would POST here on every
-// inbound message (Meta's webhook verification (GET with hub.challenge)
-// is stubbed below too, for real deployment).
+
 const express = require("express");
 const db = require("../db/db");
 const { cancelPendingSchedule } = require("../scheduler/scheduleHelper");

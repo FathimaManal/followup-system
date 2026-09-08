@@ -148,6 +148,7 @@ file — no other file needs to change.
 ## Deployment
 
 Deployed Link : https://followup-system.onrender.com
+Demo video Link : https://drive.google.com/file/d/1vMvs0HtAh8rMJmZZJMiFfwbSIb3-OKkD/view?usp=sharing
 
 ## What I'd add with more time
 
@@ -158,7 +159,6 @@ Deployed Link : https://followup-system.onrender.com
 
   
 
-https://github.com/user-attachments/assets/6e2f66d6-448f-429b-80a9-9745640649c1
 
 
 

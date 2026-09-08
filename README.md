@@ -155,3 +155,13 @@ Deployed Link : https://followup-system.onrender.com
 - Multi-user roles / team accounts (currently single shared admin login)
 - Timezone-aware scheduling display in the UI
 - Rate limiting on the auth endpoint
+
+  
+
+https://github.com/user-attachments/assets/6e2f66d6-448f-429b-80a9-9745640649c1
+
+
+
+
+
+

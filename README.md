@@ -2,8 +2,9 @@
 
 A full-stack app where a business user logs in, adds customers, sets a
 follow-up cadence per customer, and the system automatically sends
-AI-generated WhatsApp follow-ups on schedule — stopping the moment the
+AI-generated WhatsApp follow-ups on schedule - stopping the moment the
 customer replies.
+A note on WhatsApp integration: this runs against a mock WhatsApp provider by default, not the live Cloud API. Real WhatsApp Business API access requires Meta business verification, which realistically takes days rather than hours — not something achievable inside this timeline. Rather than lose build time chasing that approval, I built the mock as a genuine drop-in module (services/whatsappService.js) with the same function signature the real integration uses, including a working real-mode implementation already written and ready to enable (WHATSAPP_MODE=real) — swapping providers is a one-line env change, not a rewrite.
 
 ## Stack & why
 
@@ -81,37 +82,7 @@ cron.js runs every minute
                       — NEVER marked as sent
 ```
 
-### Why pre-generating slots (rather than computing "what's next" live)
 
-Pre-generating every slot up front is what makes **idempotency** and **cap
-enforcement** simple and provable: the scheduler never invents a send
-decision on the fly, it only ever transitions rows that already exist,
-each with a unique `dedupe_key`. Two overlapping cron ticks (or, in a
-multi-instance deployment, two server instances) can't double-send,
-because the claim step (`UPDATE ... WHERE status='pending'`) is atomic —
-whichever process's UPDATE actually matches a row wins it; the other
-gets `changes: 0` and moves on.
-
-### Auto-stop on reply
-
-`POST /api/webhook/whatsapp/incoming` (real WhatsApp Cloud API would call
-this same endpoint) marks the customer `has_replied = 1` and cancels every
-`pending` slot for them in one transaction. The scheduler also
-re-checks `has_replied` immediately before sending, so even a slot that
-was mid-flight when the reply landed will not go out.
-
-### Fault tolerance
-
-- LLM calls (`services/aiService.js`) are wrapped in try/catch — a bad key,
-  timeout, or outage falls back to a template message rather than blocking
-  the send or crashing the process.
-- WhatsApp calls (`services/whatsappService.js`) never throw — they resolve
-  `{ success: false, error }`, which the scheduler logs as an explicit
-  `failed` status (never silently marked `sent`).
-- Each scheduled slot is processed in its own try/catch inside the cron
-  tick, so one bad slot can't take down the rest of that tick.
-- A global Express error handler plus `process.on('uncaughtException'/
-  'unhandledRejection')` guards are in place as a last resort.
 
 ### Database schema
 
